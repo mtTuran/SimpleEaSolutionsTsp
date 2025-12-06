@@ -1,4 +1,4 @@
-from TspSolver import GaTspSolver
+from TspSolver import GaTspSolver, AcsTspSolver
 import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
@@ -18,11 +18,19 @@ if __name__ == '__main__':
             dists = list(map(float, dists.split()))
             intercity_data[key] = dists
 
+    starting_city = 22
+    population_size = 40
+    crossover_rate = 0.8
+    mutation_rate = 0.05
+    number_of_elits = 10
+    max_iters = 1000
+
+    '''
     ga_solver = GaTspSolver(city_data, intercity_data)
-    solutions, avg_costs = ga_solver.solve(22, 40, 0.8, 0.05, 10, 100)
+    solutions, avg_costs = ga_solver.solve(starting_city, population_size, crossover_rate, mutation_rate, number_of_elits, max_iters)
     
-    print(f"Average cost of the final solutions: {avg_costs[-1]}")
-    print(f"Cost of the best solution: {solutions[0].get_cost()}")
+    print(f"\nAverage cost of the final solutions: {avg_costs[-1]}")
+    print(f"\nCost of the best solution: {solutions[0].get_cost()}")
     print(f"\nPath of the best solution:\n{solutions[0].get_path()}")
 
     plt.scatter(range(1, len(avg_costs) + 1), avg_costs)
@@ -30,4 +38,21 @@ if __name__ == '__main__':
     plt.xlabel("Iterations")
     plt.ylabel("Average Cost")
     plt.show()
+    '''
+
+    starting_city = 22
+    colony_size = 40
+    alpha = 1
+    beta = 3
+    q0 = 0.8
+    local_evop_rate = 0.1
+    global_evop_rate = 0.1
+    max_iters = 1000
+
+    acs_solver = AcsTspSolver(city_data, intercity_data)
+    solution = acs_solver.solve(starting_city, colony_size, alpha, beta, q0, local_evop_rate, global_evop_rate, max_iters)
+    
+    print(f"\nCost of the best solution: {solution.get_cost()}")
+    print(f"\nPath of the best solution:\n{solution.get_path()}")
+
     
