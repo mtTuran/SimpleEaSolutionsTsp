@@ -9,13 +9,16 @@ class GaTspSolver:
         TspSolution.set_intercity_data(intercity_data)
         
     def solve(self, starting_city, population_size, crossover_rate, mutation_rate, number_of_elits, max_iters):
+        avg_costs = []
         solutions = self.initialize_population(starting_city, population_size)
+        costs = [sol.get_cost() for sol in solutions]
+        avg_costs.append(sum(costs) / len(costs))
         for _ in range(max_iters):
             next_generation = self.elitism(solutions, number_of_elits)
             while len(next_generation) < population_size:
                 if random.uniform(0, 1) < crossover_rate:
                     parent_solutions = self.roulette_select(solutions, 2)
-                    children_solutions = self.mate(starting_city, parent_solutions[0], parent_solutions[1], 2)
+                    children_solutions = self.mate(starting_city, parent_solutions[0], parent_solutions[1], 1)
                     next_generation = next_generation + children_solutions
                 else:
                     survivor = self.roulette_select(solutions, 1)
@@ -24,8 +27,11 @@ class GaTspSolver:
                 if random.uniform(0, 1) < mutation_rate:
                     mutated_survivor = self.mutate(next_generation[i])
                     next_generation[i] = mutated_survivor
+            solutions = next_generation
+            costs = [sol.get_cost() for sol in solutions]
+            avg_costs.append(sum(costs) / len(costs))
         ordered_solutions = sorted(solutions, key=lambda solution: solution.get_cost())
-        return ordered_solutions
+        return ordered_solutions, avg_costs
 
     def initialize_population(self, starting_city, population_size):
         population = []
@@ -49,23 +55,11 @@ class GaTspSolver:
             first_div_spot = random.randint(1, len(solution_path_1))
             sec_div_spot = random.randint(1, len(solution_path_1))
             first_div_spot, sec_div_spot = min(first_div_spot, sec_div_spot), max(first_div_spot, sec_div_spot)
-            first_parent_slice = solution_path_1[first_div_spot : sec_div_spot + 1]
-            new_solution_path = [starting_city]
-            i = 1
-            j = 1
-            while i < first_div_spot:
-                if solution_path_2[j] not in first_parent_slice:
-                    new_solution_path.append(solution_path_2[j])
-                    i += 1
-                j += 1
-            new_solution_path = new_solution_path + first_parent_slice
-            i = sec_div_spot + 1
-            j = 1
-            while i < len(solution_path_1):
-                if solution_path_2[j] not in new_solution_path:
-                    new_solution_path.append(solution_path_2[j])
-                    i += 1
-                j += 1
+            middle_slice = solution_path_1[first_div_spot : sec_div_spot]
+            left_slice = [city for city in solution_path_2[1:first_div_spot] if city not in middle_slice]
+            right_slice = [city for city in solution_path_2[first_div_spot:] if city not in middle_slice]
+            new_solution_path = [starting_city] + left_slice + middle_slice + right_slice
+            
             children.append(TspSolution(new_solution_path))
 
             solution_path_1, solution_path_2 = solution_path_2, solution_path_1

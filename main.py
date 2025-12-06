@@ -1,4 +1,5 @@
 from TspSolver import GaTspSolver
+import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
     city_data_path = "cityData.txt"
@@ -18,10 +19,15 @@ if __name__ == '__main__':
             intercity_data[key] = dists
 
     ga_solver = GaTspSolver(city_data, intercity_data)
-    solutions = ga_solver.solve(5, 40, 0.8, 0.05, 10, 100)
-    scores = [sol.get_cost() for sol in solutions]
-    print(scores)
-    print()
-    print(solutions[0].get_path())
-    print(len(set(solutions[0].get_path())))
+    solutions, avg_costs = ga_solver.solve(22, 40, 0.8, 0.05, 10, 100)
+    
+    print(f"Average cost of the final solutions: {avg_costs[-1]}")
+    print(f"Cost of the best solution: {solutions[0].get_cost()}")
+    print(f"\nPath of the best solution:\n{solutions[0].get_path()}")
+
+    plt.scatter(range(1, len(avg_costs) + 1), avg_costs)
+    plt.title("Average cost per iteration")
+    plt.xlabel("Iterations")
+    plt.ylabel("Average Cost")
+    plt.show()
     
