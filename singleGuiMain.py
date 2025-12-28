@@ -86,6 +86,8 @@ if __name__ == '__main__':
     ax1.set_xlabel("Iteration", fontsize=11)
     ax1.set_ylabel("Average Cost", fontsize=11)
     ax1.grid(True, alpha=0.3)
+    ax1.set_xlim(left=0)
+    ax1.set_ylim(bottom=0)
     ax1.text(0.98, 0.97, f'Final Avg: {ga_avg_costs[-1]:.2f}', 
              transform=ax1.transAxes, ha='right', va='top',
              bbox=dict(boxstyle='round', facecolor='wheat', alpha=0.5))
@@ -108,7 +110,8 @@ if __name__ == '__main__':
     ax2.set_ylabel("Y Coordinate", fontsize=11)
     ax2.legend(fontsize=9)
     ax2.grid(True, alpha=0.3)
-    ax2.axis('equal')
+    ax2.set_xlim(left=0)
+    ax2.set_ylim(bottom=0)
     
     # ----- GA Statistics -----
     ax3 = plt.subplot(2, 3, 3)
@@ -155,7 +158,8 @@ if __name__ == '__main__':
     ax4.set_ylabel("Y Coordinate", fontsize=11)
     ax4.legend(fontsize=9)
     ax4.grid(True, alpha=0.3)
-    ax4.axis('equal')
+    ax4.set_xlim(left=0)
+    ax4.set_ylim(bottom=0)
     
     # ----- ACS Statistics -----
     ax5 = plt.subplot(2, 3, 6)
@@ -202,6 +206,7 @@ if __name__ == '__main__':
     ax6.set_title("Algorithm Comparison", fontsize=13, fontweight='bold')
     ax6.set_ylabel("Total Tour Cost", fontsize=11)
     ax6.grid(True, alpha=0.3, axis='y')
+    ax6.set_ylim(bottom=0)
     
     # Add winner annotation
     winner_idx = costs.index(min(costs))
