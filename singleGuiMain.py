@@ -160,6 +160,9 @@ if __name__ == '__main__':
     ax4.grid(True, alpha=0.3)
     ax4.set_xlim(left=0)
     ax4.set_ylim(bottom=0)
+    ax4.plot(acs_x, acs_y, 'o-', linewidth=2, markersize=6, color='#06A77D', alpha=0.7)
+    ax4.plot([acs_x[-1], acs_x[0]], [acs_y[-1], acs_y[0]], 'o-', linewidth=2, markersize=6, color='#06A77D', alpha=0.7)
+    ax4.plot(acs_x[0], acs_y[0], 'r*', markersize=15, label=f'Start (City {starting_city})')
     
     # ----- ACS Statistics -----
     ax5 = plt.subplot(2, 3, 6)
